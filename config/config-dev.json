@@ -1,0 +1,5 @@
+{
+  "port":3100,
+  "outputfolder":"build",
+  "secret_key":"jhq3djo9lksl"
+}
