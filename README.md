@@ -11,3 +11,7 @@ Body: {
  if the post request is success, newly update timeInterval sent to client through eventStream connection beteen client and server using HTTP protocol.
  
  Event Stream Connection URL: http://<host-name>:3100/api/traffic/events
+
+Command to run project :- 
+
+npm run dev ( For development Environments)
