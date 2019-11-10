@@ -22,4 +22,5 @@ app.use('*',(req,res)=>{
 res.sendFile(path.join(__dirname,'../' + runType + '/index.html'));
 })
 
+
 module.exports=app;

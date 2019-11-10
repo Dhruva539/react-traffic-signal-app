@@ -24,9 +24,17 @@ class App extends Component {
       yellow:this.colors.grey,
       green:this.colors.grey,
       nextSignal: 'yellow',
-      delay:3000
+      delay:3000,
+      intervalId:null
     }
     this.eventSource=new EventSource("http://localhost:3100/api/traffic/events");
+    this.eventSource.onopen = e => {
+      console.log(e);
+    }
+    
+    this.eventSource.addEventListener('ping',e =>{
+      console.log(e);
+    })
   }
 
 
@@ -71,19 +79,36 @@ class App extends Component {
        this.setState({
          delay:inputData.delay
        })
-  }
-
+   clearInterval(this.state.intervalId);                
+  
+}
+   
+handleSignalInterval=(delay) =>{
+  this.signalInterval= setInterval( () => {
+    this.handleSignalChange();
+  },delay);
+}
 componentDidMount() {
-  this.eventSource.onmessage= e => {
-    console.log(e);
-    this.updateSignalDelay(JSON.parse(e.data));
+  this.eventSource.onmessage = e => {
+      console.log(e.data);
+      let delay= JSON.parse(e.data).delay;
+      clearInterval(this.state.intervalId);
+      const signalIntervalId= setInterval( () => {
+        this.handleSignalChange();
+      },delay);
+      this.setState({intervalId:signalIntervalId});
+ 
   }
-  setInterval( () => {
+  const signalIntervalId= setInterval( () => {
     this.handleSignalChange();
   },this.state.delay);
+  this.setState({intervalId:signalIntervalId});
 }
 
-
+componentWillUnmount() {
+  clearInterval(this.state.intervalId);
+  
+}
 render(){
   return (
     <div className="traffic-div">
